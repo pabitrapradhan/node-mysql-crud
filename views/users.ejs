@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List from Controller</title>
+</head>
+<body>
+
+    <h2>User List (Fetched via Controller)</h2>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        
+        <!-- কন্ট্রোলার থেকে আসা users ভ্যারিয়েবলের ওপর লুপ চলছে -->
+        <% users.forEach(function(user) { %>
+            <tr>
+                <td><%= user.id %></td>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+            </tr>
+        <% }); %>
+    </table>
+
+</body>
+</html>

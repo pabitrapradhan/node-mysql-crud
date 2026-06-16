@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Employee</title>
+</head>
+<body>
+
+    <!-- 💡 যদি ব্যাক-এন্ড থেকে কোনো 'success' ফ্ল্যাশ মেসেজ আসে, তবেই এটি শো করবে -->
+<% if (messages.success) { %>
+    <div style="padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; margin-bottom: 15px;">
+        <%= messages.success %>
+    </div>
+    
+    <!-- আপনি চাইলে সরাসরি ব্রাউজার পপ-আপ এলার্টও দেখাতে পারেন -->
+    <script>
+        alert("<%= messages.success %>");
+    </script>
+<% } %>
+
+
+<% if (messages.delsuccess) { %>
+    <div style="padding: 10px; background-color: #d4edda; color: #f50d34; border: 1px solid #fa1111; margin-bottom: 15px;">
+        <%= messages.delsuccess %>
+    </div>
+    
+    <!-- আপনি চাইলে সরাসরি ব্রাউজার পপ-আপ এলার্টও দেখাতে পারেন -->
+    <script>
+        alert("<%= messages.delsuccess %>");
+    </script>
+<% } %>
+
+    <h2>Add New Employee</h2>
+    
+    <!-- 💡 মনে রাখবেন: ডেটা সাবমিট করার জন্য আমরা action এবং post মেথড ব্যবহার করছি -->
+    <form action="/api/store-user" method="POST" enctype="multipart/form-data">
+        <label>Name:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
+
+        <label>Department:</label><br>
+        <input type="text" name="department" required><br><br>
+
+        <label>Profile Image:</label>
+        <input type="file" name="profile_image" accept="image/*" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+<table border="1" cellpadding="10">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Image</th>
+            <th>Action</th>
+        </tr>
+        
+        <!-- কন্ট্রোলার থেকে আসা users ভ্যারিয়েবলের ওপর লুপ চলছে -->
+        <% users.forEach(function(user) { %>
+            <tr>
+                <td><%= user.id %></td>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td>
+                    <% if(user.image) { %>
+                        <img src="/uploads/<%= user.image %>" width="50" height="50" style="border-radius: 50%;">
+                    <% } else { %>
+                        No Image
+                    <% } %>
+                </td>
+                <td><a href="/api/edit-user/<%= user.id %>">Edit</a>/<a href="/api/delete-user/<%= user.id %>" onclick="return confirm('Are you sure?')">Delete</a></td>
+            </tr>
+        <% }); %>
+    </table>
+
+
+</body>
+</html>
