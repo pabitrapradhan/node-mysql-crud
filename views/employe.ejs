@@ -3,147 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management Dashboard</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 font-sans antialiased text-gray-800">
-
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <title>Employee Dashboard</title>
+    <style>
+        /* CSS Reset & Variable Setup */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding: 40px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
         
-        <!-- Header -->
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Employee Management System</h1>
-            <p class="text-gray-500 mt-1">Manage your workforce, update profiles, and monitor departments dynamically.</p>
+        /* Header Dashboard Look */
+        header { margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+        header h1 { font-size: 28px; color: #1a202c; font-weight: 700; }
+        header p { color: #718096; margin-top: 5px; font-size: 14px; }
+
+        /* Notification Banners */
+        .alert { padding: 15px; border-radius: 6px; font-weight: 6px; margin-bottom: 25px; font-size: 15px; border-left: 5px solid; }
+        .alert-success { background-color: #def7ec; color: #03543f; border-color: #31c48d; }
+        .alert-danger { background-color: #fde8e8; color: #9b1c1c; border-color: #f98080; }
+
+        /* Responsive Layout Grid */
+        .dashboard-grid { display: flex; gap: 30px; flex-wrap: wrap; }
+        .form-card { flex: 1; min-width: 320px; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); height: fit-content; }
+        .table-card { flex: 2; min-width: 500px; background: #fff; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden; }
+
+        /* Dynamic Form Styling */
+        h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #2d3748; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #4a5568; }
+        .form-group input[type="text"], .form-group input[type="email"] { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 6px; outline: none; transition: all 0.2s; font-size: 14px; }
+        .form-group input:focus { border-color: #4299e1; box-shadow: 0 0 0 3px rgba(66,153,225,0.2); }
+        
+        /* Modern Custom File Upload Field */
+        .file-input-wrapper { display: block; border: 2px dashed #cbd5e0; padding: 15px; text-align: center; border-radius: 6px; background: #f7fafc; cursor: pointer; transition: border 0.2s; position: relative; }
+        .file-input-wrapper:hover { border-color: #4299e1; }
+        .file-input-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        /* Interactive Buttons */
+        .btn-submit { width: 100%; background: #3182ce; color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: 6px; cursor: pointer; font-size: 15px; transition: background 0.2s; }
+        .btn-submit:hover { background: #2b6cb0; }
+
+        /* Professional Admin Table Grid */
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background-color: #f7fafc; color: #718096; font-weight: 600; text-transform: uppercase; font-size: 12px; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; letter-spacing: 0.5px; }
+        td { padding: 15px 20px; border-bottom: 1px solid #edf2f7; vertical-align: middle; font-size: 14px; }
+        tr:hover { background-color: #f8fafc; }
+
+        /* Profile Thumbnail Layout */
+        .profile-container { display: flex; items-center: center; gap: 12px; }
+        .avatar { width: 42px; height: 42px; border-radius: 50%; object-cover: cover; background: #e2e8f0; border: 1px solid #cbd5e0; display: inline-block; vertical-align: middle; }
+        .avatar-fallback { width: 42px; height: 42px; border-radius: 50%; bg-color: #edf2f7; color: #4a5568; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; border: 1px solid #cbd5e0; }
+        .emp-name { font-weight: 600; color: #1a202c; }
+        .emp-dept { font-size: 12px; color: #718096; margin-top: 2px; }
+
+        /* Action Buttons Interaction */
+        .actions-cell { display: flex; gap: 10px; }
+        .btn-action { text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: 600; transition: background 0.2s; }
+        .btn-edit { color: #2b6cb0; background: #ebf8ff; }
+        .btn-edit:hover { background: #bee3f8; }
+        .btn-delete { color: #c53030; background: #fff5f5; }
+        .btn-delete:hover { background: #fed7d7; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>Employee Directory</h1>
+            <p>Full-Stack Node.js Administration Dashboard Infrastructure Hub</p>
         </header>
 
-        <!-- Flash Messages Block -->
-        <div class="mb-6">
-            <% if (messages.success) { %>
-                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded shadow-sm flex items-center justify-between">
-                    <div class="flex items-center">
-                        <span class="text-emerald-800 font-medium"><%= messages.success %></span>
-                    </div>
-                </div>
-                <script>alert("<%= messages.success %>");</script>
-            <% } %>
+        <!-- Dynamic Feedback Banners Block -->
+        <% if (messages.success) { %>
+            <div class="alert alert-success"><%= messages.success %></div>
+            <script>alert("<%= messages.success %>");</script>
+        <% } %>
 
-            <% if (messages.delsuccess) { %>
-                <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded shadow-sm flex items-center justify-between">
-                    <div class="flex items-center">
-                        <span class="text-rose-800 font-medium"><%= messages.delsuccess %></span>
-                    </div>
-                </div>
-                <script>alert("<%= messages.delsuccess %>");</script>
-            <% } %>
-        </div>
+        <% if (messages.delsuccess) { %>
+            <div class="alert alert-danger"><%= messages.delsuccess %></div>
+            <script>alert("<%= messages.delsuccess %>");</script>
+        <% } %>
 
-        <!-- Main Grid Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="dashboard-grid">
             
-            <!-- Left Side: Form Container -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
-                <h2 class="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100">Add New Employee</h2>
-                
-                <form action="/api/store-user" method="POST" enctype="multipart/form-data" class="space-y-5">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                        <input type="text" name="name" required placeholder="John Doe" 
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition outline-none">
+            <!-- Core Workspace Form Component -->
+            <div class="form-card">
+                <h2>Add New Employee</h2>
+                <form action="/api/store-user" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" required placeholder="Ex: John Doe">
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                        <input type="email" name="email" required placeholder="johndoe@example.com" 
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition outline-none">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" required placeholder="Ex: john@company.com">
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
-                        <input type="text" name="department" required placeholder="Backend Engineering" 
-                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition outline-none">
+                    <div class="form-group">
+                        <label>Department</label>
+                        <input type="text" name="department" required placeholder="Ex: Technology">
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition cursor-pointer relative bg-gray-50">
-                            <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600 justify-center">
-                                    <span class="relative font-medium text-blue-600 hover:text-blue-500">Upload a file</span>
-                                </div>
-                                <p class="text-xs text-gray-500">PNG, JPG up to 2MB</p>
-                            </div>
-                            <input type="file" name="profile_image" accept="image/*" required class="absolute inset-0 opacity-0 cursor-pointer">
+                    <div class="form-group">
+                        <label>Profile Image</label>
+                        <div class="file-input-wrapper">
+                            <span style="font-size: 14px; color: #4a5568; font-weight: 500;">Click to select profile picture</span>
+                            <input type="file" name="profile_image" accept="image/*" required>
                         </div>
                     </div>
 
-                    <button type="submit" 
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow-sm transition-colors duration-200">
-                        Save Employee
-                    </button>
+                    <button type="submit" class="btn-submit">Save Record</button>
                 </form>
             </div>
 
-            <!-- Right Side: Data Table Container -->
-            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-6 border-b border-gray-100 bg-white">
-                    <h2 class="text-xl font-semibold text-gray-800">Active Employee Directory</h2>
+            <!-- Operational Enterprise Ledger Component -->
+            <div class="table-card">
+                <div style="padding: 20px; border-bottom: 1px solid #e2e8f0;">
+                    <h2 style="margin: 0;">Active Records</h2>
                 </div>
                 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                <div style="overflow-x: auto;">
+                    <table>
                         <thead>
-                            <tr class="bg-gray-50 text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100">
-                                <th class="px-6 py-4 font-medium">ID</th>
-                                <th class="px-6 py-4 font-medium">Employee</th>
-                                <th class="px-6 py-4 font-medium">Email</th>
-                                <th class="px-6 py-4 font-medium text-center">Actions</th>
+                            <tr>
+                                <th style="width: 8%;">ID</th>
+                                <th style="width: 45%;">Employee Details</th>
+                                <th style="width: 25%;">Email</th>
+                                <th style="width: 22%;">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody>
                             <% if (users.length === 0) { %>
                                 <tr>
-                                    <td colspan="5" class="px-6 py-10 text-center text-gray-400">
-                                        No employee records found. Add someone to populate the list.
+                                    <td colspan="4" style="text-align: center; color: #a0aec0; padding: 40px 20px;">
+                                        No active ledger records exist. Populate database fields to view data grids.
                                     </td>
                                 </tr>
                             <% } %>
                             
                             <% users.forEach(function(user) { %>
-                                <tr class="hover:bg-gray-50/70 transition-colors">
-                                    <td class="px-6 py-4 font-semibold text-gray-600 text-sm">
-                                        #<%= user.id %>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <% if(user.image) { %>
-                                                    <img class="h-10 w-10 rounded-full object-cover shadow-inner border border-gray-200" src="/uploads/<%= user.image %>" alt="">
-                                                <% } else { %>
-                                                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-sm">
-                                                        <%= user.name.charAt(0).toUpperCase() %>
-                                                    </div>
-                                                <% } %>
-                                            </div>
+                                <tr>
+                                    <td style="font-weight: 600; color: #718096;">#<%= user.id %></td>
+                                    <td>
+                                        <div class="profile-container">
+                                            <% if(user.image) { %>
+                                                <img class="avatar" src="/uploads/<%= user.image %>" alt="">
+                                            <% } else { %>
+                                                <div class="avatar-fallback"><%= user.name.charAt(0).toUpperCase() %></div>
+                                            <% } %>
                                             <div>
-                                                <div class="text-sm font-semibold text-gray-900"><%= user.name %></div>
-                                                <div class="text-xs text-gray-400 font-medium"><%= user.department || 'General' %></div>
+                                                <div class="emp-name"><%= user.name %></div>
+                                                <div class="emp-dept"><%= user.department || 'General Workforce' %></div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">
-                                        <%= user.email %>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm font-medium text-center">
-                                        <div class="flex items-center justify-center space-x-3">
-                                            <a href="/api/edit-user/<%= user.id %>" 
-                                               class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1.5 rounded-md transition-colors">Edit</a>
-                                            <a href="/api/delete-user/<%= user.id %>" 
-                                               onclick="return confirm('Are you sure you want to permanently delete this employee?')" 
-                                               class="text-rose-600 hover:text-rose-900 bg-rose-50 px-3 py-1.5 rounded-md transition-colors">Delete</a>
+                                    <td style="color: #4a5568;"><%= user.email %></td>
+                                    <td>
+                                        <div class="actions-cell">
+                                            <a href="/api/edit-user/<%= user.id %>" class="btn-action btn-edit">Edit</a>
+                                            <a href="/api/delete-user/<%= user.id %>" onclick="return confirm('Are you sure you want to permanently delete this employee?')" class="btn-action btn-delete">Delete</a>
                                         </div>
                                     </td>
                                 </tr>
