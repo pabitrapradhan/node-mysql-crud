@@ -2,80 +2,159 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create New Employee Add</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 font-sans antialiased text-gray-800">
 
-    <!-- 💡 যদি ব্যাক-এন্ড থেকে কোনো 'success' ফ্ল্যাশ মেসেজ আসে, তবেই এটি শো করবে -->
-<% if (messages.success) { %>
-    <div style="padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; margin-bottom: 15px;">
-        <%= messages.success %>
-    </div>
-    
-    <!-- আপনি চাইলে সরাসরি ব্রাউজার পপ-আপ এলার্টও দেখাতে পারেন -->
-    <script>
-        alert("<%= messages.success %>");
-    </script>
-<% } %>
-
-
-<% if (messages.delsuccess) { %>
-    <div style="padding: 10px; background-color: #d4edda; color: #f50d34; border: 1px solid #fa1111; margin-bottom: 15px;">
-        <%= messages.delsuccess %>
-    </div>
-    
-    <!-- আপনি চাইলে সরাসরি ব্রাউজার পপ-আপ এলার্টও দেখাতে পারেন -->
-    <script>
-        alert("<%= messages.delsuccess %>");
-    </script>
-<% } %>
-
-    <h2>Add New Employee</h2>
-    
-    <!-- 💡 মনে রাখবেন: ডেটা সাবমিট করার জন্য আমরা action এবং post মেথড ব্যবহার করছি -->
-    <form action="/api/store-user" method="POST" enctype="multipart/form-data">
-        <label>Name:</label><br>
-        <input type="text" name="name" required><br><br>
-
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
-
-        <label>Department:</label><br>
-        <input type="text" name="department" required><br><br>
-
-        <label>Profile Image:</label>
-        <input type="file" name="profile_image" accept="image/*" required><br><br>
-
-        <button type="submit">Submit</button>
-    </form>
-
-<table border="1" cellpadding="10">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Image</th>
-            <th>Action</th>
-        </tr>
+    <div class="max-w-7xl mx-auto px-4 py-8">
         
-        <!-- কন্ট্রোলার থেকে আসা users ভ্যারিয়েবলের ওপর লুপ চলছে -->
-        <% users.forEach(function(user) { %>
-            <tr>
-                <td><%= user.id %></td>
-                <td><%= user.name %></td>
-                <td><%= user.email %></td>
-                <td>
-                    <% if(user.image) { %>
-                        <img src="/uploads/<%= user.image %>" width="50" height="50" style="border-radius: 50%;">
-                    <% } else { %>
-                        No Image
-                    <% } %>
-                </td>
-                <td><a href="/api/edit-user/<%= user.id %>">Edit</a>/<a href="/api/delete-user/<%= user.id %>" onclick="return confirm('Are you sure?')">Delete</a></td>
-            </tr>
-        <% }); %>
-    </table>
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Employee Management System</h1>
+            <p class="text-gray-500 mt-1">Manage your workforce, update profiles, and monitor departments dynamically.</p>
+        </header>
 
+        <!-- Flash Messages Block -->
+        <div class="mb-6">
+            <% if (messages.success) { %>
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded shadow-sm flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-emerald-800 font-medium"><%= messages.success %></span>
+                    </div>
+                </div>
+                <script>alert("<%= messages.success %>");</script>
+            <% } %>
+
+            <% if (messages.delsuccess) { %>
+                <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded shadow-sm flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-rose-800 font-medium"><%= messages.delsuccess %></span>
+                    </div>
+                </div>
+                <script>alert("<%= messages.delsuccess %>");</script>
+            <% } %>
+        </div>
+
+        <!-- Main Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Side: Form Container -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100">Add New Employee</h2>
+                
+                <form action="/api/store-user" method="POST" enctype="multipart/form-data" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" name="name" required placeholder="John Doe" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" name="email" required placeholder="johndoe@example.com" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                        <input type="text" name="department" required placeholder="Backend Engineering" 
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition cursor-pointer relative bg-gray-50">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600 justify-center">
+                                    <span class="relative font-medium text-blue-600 hover:text-blue-500">Upload a file</span>
+                                </div>
+                                <p class="text-xs text-gray-500">PNG, JPG up to 2MB</p>
+                            </div>
+                            <input type="file" name="profile_image" accept="image/*" required class="absolute inset-0 opacity-0 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <button type="submit" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow-sm transition-colors duration-200">
+                        Save Employee
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Side: Data Table Container -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 bg-white">
+                    <h2 class="text-xl font-semibold text-gray-800">Active Employee Directory</h2>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100">
+                                <th class="px-6 py-4 font-medium">ID</th>
+                                <th class="px-6 py-4 font-medium">Employee</th>
+                                <th class="px-6 py-4 font-medium">Email</th>
+                                <th class="px-6 py-4 font-medium text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <% if (users.length === 0) { %>
+                                <tr>
+                                    <td colspan="5" class="px-6 py-10 text-center text-gray-400">
+                                        No employee records found. Add someone to populate the list.
+                                    </td>
+                                </tr>
+                            <% } %>
+                            
+                            <% users.forEach(function(user) { %>
+                                <tr class="hover:bg-gray-50/70 transition-colors">
+                                    <td class="px-6 py-4 font-semibold text-gray-600 text-sm">
+                                        #<%= user.id %>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <% if(user.image) { %>
+                                                    <img class="h-10 w-10 rounded-full object-cover shadow-inner border border-gray-200" src="/uploads/<%= user.image %>" alt="">
+                                                <% } else { %>
+                                                    <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-sm">
+                                                        <%= user.name.charAt(0).toUpperCase() %>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-semibold text-gray-900"><%= user.name %></div>
+                                                <div class="text-xs text-gray-400 font-medium"><%= user.department || 'General' %></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">
+                                        <%= user.email %>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-medium text-center">
+                                        <div class="flex items-center justify-center space-x-3">
+                                            <a href="/api/edit-user/<%= user.id %>" 
+                                               class="text-blue-600 hover:text-blue-900 bg-blue-50 px-3 py-1.5 rounded-md transition-colors">Edit</a>
+                                            <a href="/api/delete-user/<%= user.id %>" 
+                                               onclick="return confirm('Are you sure you want to permanently delete this employee?')" 
+                                               class="text-rose-600 hover:text-rose-900 bg-rose-50 px-3 py-1.5 rounded-md transition-colors">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>
