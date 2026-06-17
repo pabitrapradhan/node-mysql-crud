@@ -39,8 +39,19 @@ app.use(flash());
 // 💡 নোড জেএস নিয়ম: HTML Form এর ডেটা ব্যাক-এন্ডে রিড করার জন্য এটি অবশ্যই লাগবে
 app.use(express.urlencoded({ extended: true }));
 
+
+// 💡 লারাভেলের গ্লোবাল সেশন শেয়ারিং এর হুবহু সমান নোড জেএস নিয়ম:
+app.use((req, res, next) => {
+    // res.locals এর ভেতর সেশন রাখলে তা লারাভেলের গ্লোবাল ব্লেড সেশনের মতো কাজ করে
+    // এর ফলে এটি নোড জেএস এর সমস্ত ইজেএস (.ejs) পেজের জন্য অটোমেটিক 'পাবলিক' বা দৃশ্যমান হয়ে যাবে
+    res.locals.session = req.session; 
+    next();
+});
+
+
+
 // ২. রাউটটি অ্যাপে যুক্ত করুন (লারাভেলের 'api' প্রিফিক্সের মতো)
-app.use('/api', userRoutes);
+app.use('/admin', userRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running successfully on port ${PORT}`);

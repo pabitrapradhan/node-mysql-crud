@@ -67,6 +67,15 @@
 
     <div class="container">
         
+        <% if (session && session.admin) { %>
+    <h1>Welcome, <%= session.admin.email %></h1>
+    <p>Logged In ID: <%= session.admin.id %></p>
+    <a href="/admin/logout">Logout</a>
+<% } else { %>
+    <h1>Welcome, Guest</h1>
+<% } %>
+
+
         <header>
             <h1>Employee Directory</h1>
             <p>Full-Stack Node.js Administration Dashboard Infrastructure Hub</p>

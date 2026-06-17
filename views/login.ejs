@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Employee Management System</title>
+    <style>
+        /* CSS Reset & Variable Setup */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        
+        /* Main Login Card Layout */
+        .login-card { background: #fff; width: 100%; max-width: 420px; padding: 40px 35px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05); border: 1px solid #edf2f7; }
+        
+        /* Header Dashboard Look Inside Login */
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header h2 { font-size: 26px; color: #1a202c; font-weight: 700; letter-spacing: -0.5px; }
+        .login-header p { color: #718096; font-size: 14px; margin-top: 6px; }
+
+        /* Notification Banners for Errors */
+        .alert-danger { padding: 12px 15px; background-color: #fde8e8; color: #9b1c1c; border-left: 4px solid #f98080; border-radius: 6px; font-size: 14px; font-weight: 500; margin-bottom: 25px; line-height: 1.4; }
+
+        /* Input & Label Fields Component */
+        .form-group { margin-bottom: 22px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input[type="email"], .form-group input[type="password"] { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e0; border-radius: 6px; outline: none; transition: all 0.2s; font-size: 15px; color: #2d3748; background-color: #f7fafc; }
+        .form-group input:focus { border-color: #3182ce; background-color: #fff; box-shadow: 0 0 0 3px rgba(66,153,225,0.25); }
+        
+        /* Interactive Submit Button */
+        .btn-login { width: 100%; background: #3182ce; color: #fff; border: none; padding: 13px; border-radius: 6px; font-weight: 6px; cursor: pointer; font-size: 16px; transition: background 0.2s, transform 0.1s; margin-top: 10px; box-shadow: 0 4px 6px -1px rgba(49,130,206,0.3); }
+        .btn-login:hover { background: #2b6cb0; }
+        .btn-login:active { transform: scale(0.98); }
+
+        /* Footer Copyright Look */
+        .login-footer { text-align: center; margin-top: 25px; font-size: 12px; color: #a0aec0; }
+    </style>
+</head>
+<body>
+
+    <!-- Core Workspace Login Component -->
+    <div class="login-card">
+        
+        <div class="login-header">
+            <h2>Admin Portal</h2>
+            <p>Sign in to access your administration network</p>
+        </div>
+
+        <!-- Dynamic Feedback Banners Block -->
+        <% if (messages.error) { %>
+            <div class="alert alert-danger">
+                <%= messages.error %>
+            </div>
+            <script>
+                alert("<%= messages.error %>");
+            </script>
+        <% } %>
+
+        <!-- Core Authentication Form -->
+        <form action="/admin/login-add" method="POST">
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="admin@company.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-login">Sign In</button>
+        </form>
+
+        <div class="login-footer">
+            &copy; 2026 Enterprise Infrastructure Network. All rights reserved.
+        </div>
+
+    </div>
+
+</body>
+</html>

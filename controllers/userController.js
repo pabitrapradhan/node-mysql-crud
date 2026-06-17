@@ -17,6 +17,47 @@ const showUsersPage = async (req, res) => {
     }
 };
 
+
+const login = async(req,res)=>{
+    res.render('login');
+}
+
+const login_add = async(req,res)=>{
+    
+    try {
+    
+    const {email,password} = req.body;
+    const [rows] = await db.query('SELECT * FROM admin WHERE email = ? AND password = ?', [email, password]);
+    if(rows.length > 0)
+    {
+         // 💡 লারাভেলের session(['admin' => $user]) এর মতো নোড জেএস নিয়ম:
+            // ডাটাবেস থেকে আসা প্রথম অ্যাডমিনের ডেটা সেশনে সেভ করা হলো
+            req.session.admin = rows[0]; 
+        return res.redirect('/admin/createusers');
+       
+    }
+    else
+    {
+        req.flash('error', 'Invalid email or password!');
+        res.render('login');
+       
+    }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error fetching data from MySQL database");
+    }
+
+}
+
+const logout = async(req,res)=>{
+    // 💡 লারাভেলের session()->forget('admin') এর মতো নোড জেএস নিয়ম:
+    req.session.admin = null; // সেশন থেকে অ্যাডমিন ডেটা মুছে ফেলা হলো
+    res.redirect('/admin/login'); // লগআউটের পর লগইন পেজে রিডাইরেক্ট করা হলো
+}
+
+
+
+
 const create_user = async(req,res)=>
 {
 const[rows]=await db.query('Select * from employees');
@@ -40,7 +81,7 @@ const storeUser = async (req, res) => {
         if(rows.length>0)
         {
              req.flash('delsuccess', 'This email is already registered!'); // লারাভেলের back()->withErrors() এর মতো
-            return res.redirect('/api/createusers');
+            return res.redirect('/admin/createusers');
         }
         
 
@@ -53,7 +94,7 @@ const storeUser = async (req, res) => {
         // 💡 লারাভেলের return redirect()->route(...) এর মতো নোড জেএস এ রিডাইরেক্ট করার নিয়ম:
         // ডেটা সেভ হওয়ার পর ইউজার অটোমেটিক আবার লিস্ট পেজে চলে যাবে
         req.flash('success', 'Employee Add successfully!');
-        res.redirect('/api/createusers'); 
+        res.redirect('/admin/createusers'); 
 
     } catch (error) {
         console.error(error);
@@ -79,7 +120,7 @@ const deleteUser = async (req, res) => {
 
         // ডিলিট হওয়ার পর আবার লিস্ট পেজে রিডাইরেক্ট
         req.flash('delsuccess', 'Employee Delete successfully!');
-        res.redirect('/api/createusers');
+        res.redirect('/admin/createusers');
     } catch (error) {
         console.error(error);
         res.status(500).send("Error deleting user");
@@ -140,7 +181,7 @@ await db.query(sql, [name, email, department, finalImageName, employe_id]);
  // 💡 লারাভেলের ->with('success', '...') এর মতো নোড জেএস নিয়ম:
 req.flash('success', 'Employee updated successfully!');
 
-res.redirect('/api/createusers');
+res.redirect('/admin/createusers');
     } catch(error)
     {
       console.error(error);
@@ -152,7 +193,7 @@ res.redirect('/api/createusers');
 
 // ফাংশনটি এক্সপোর্ট করুন যাতে রাউট ফাইলে ব্যবহার করা যায়
 module.exports = {
-    showUsersPage,create_user,storeUser,deleteUser,editUser,updateUser
+    showUsersPage,create_user,storeUser,deleteUser,editUser,updateUser,login,login_add,logout
 };
 
 

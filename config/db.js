@@ -31,6 +31,17 @@ const initDatabase = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
+
+        const createDeptTableQuery = `
+            CREATE TABLE IF NOT EXISTS admin (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+
+
         await promisePool.query(createTableQuery);
         console.log("🚀 Employees table checked/created successfully in Aiven Cloud!");
     } catch (error) {
