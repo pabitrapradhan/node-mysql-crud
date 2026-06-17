@@ -67,15 +67,6 @@
 
     <div class="container">
         
-        <% if (session && session.admin) { %>
-    <h1>Welcome, <%= session.admin.email %></h1>
-    <p>Logged In ID: <%= session.admin.id %></p>
-    <a href="/admin/logout">Logout</a>
-<% } else { %>
-    <h1>Welcome, Guest</h1>
-<% } %>
-
-
         <header>
             <h1>Employee Directory</h1>
             <p>Full-Stack Node.js Administration Dashboard Infrastructure Hub</p>
@@ -97,7 +88,7 @@
             <!-- Core Workspace Form Component -->
             <div class="form-card">
                 <h2>Add New Employee</h2>
-                <form action="/admin/store-user" method="POST" enctype="multipart/form-data">
+                <form action="/api/store-user" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Full Name</label>
                         <input type="text" name="name" required placeholder="Ex: John Doe">
@@ -169,8 +160,8 @@
                                     <td style="color: #4a5568;"><%= user.email %></td>
                                     <td>
                                         <div class="actions-cell">
-                                            <a href="/admin/edit-user/<%= user.id %>" class="btn-action btn-edit">Edit</a>
-                                            <a href="/admin/delete-user/<%= user.id %>" onclick="return confirm('Are you sure you want to permanently delete this employee?')" class="btn-action btn-delete">Delete</a>
+                                            <a href="/api/edit-user/<%= user.id %>" class="btn-action btn-edit">Edit</a>
+                                            <a href="/api/delete-user/<%= user.id %>" onclick="return confirm('Are you sure you want to permanently delete this employee?')" class="btn-action btn-delete">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

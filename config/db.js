@@ -31,28 +31,7 @@ const initDatabase = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
-
-        const createDeptTableQuery = `
-            CREATE TABLE IF NOT EXISTS admin (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                email VARCHAR(255) NOT NULL UNIQUE,
-                password VARCHAR(255) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `;
-
-
         await promisePool.query(createTableQuery);
-
-         // ৩. অ্যাডমিন টেবিলে অটোমেটিক ডেটা ইনসার্ট (ইমেল ও পাসওয়ার্ড)
-        // IGNORE ব্যবহার করা হয়েছে যাতে প্রতিবার সার্ভার চালু হলে একই ডেটা বারবার ইনসার্ট না হয়
-        const insertAdminQuery = `
-            INSERT IGNORE INTO admin (email, password) 
-            VALUES ('admin@gmail.com', '123');
-        `;
-        await promisePool.query(insertAdminQuery);
-
-
         console.log("🚀 Employees table checked/created successfully in Aiven Cloud!");
     } catch (error) {
         console.error("❌ Error creating table in cloud:", error);
