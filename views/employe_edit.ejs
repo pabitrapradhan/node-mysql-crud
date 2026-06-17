@@ -2,41 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create New Employee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee Details</title>
+    <style>
+        /* CSS Reset & Variable Setup */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding: 40px 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        
+        /* Header Dashboard Look */
+        header { margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 24px; color: #1a202c; font-weight: 700; }
+        
+        /* Back to Dashboard Button */
+        .btn-back { text-decoration: none; font-size: 14px; font-weight: 600; color: #4a5568; background: #e2e8f0; padding: 8px 16px; border-radius: 6px; transition: background 0.2s; }
+        .btn-back:hover { background: #cbd5e0; }
+
+        /* Form Card Layout */
+        .form-card { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #edf2f7; }
+        
+        /* Input & Label Fields */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #4a5568; }
+        .form-group input[type="text"], .form-group input[type="email"] { width: 100%; padding: 11px 14px; border: 1px solid #cbd5e0; border-radius: 6px; outline: none; transition: all 0.2s; font-size: 14px; color: #2d3748; }
+        .form-group input:focus { border-color: #4299e1; box-shadow: 0 0 0 3px rgba(66,153,225,0.2); }
+        
+        /* Current Image Section Layout */
+        .current-image-box { display: flex; align-items: center; gap: 15px; background: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #edf2f7; margin-bottom: 20px; }
+        .current-image-box span { font-size: 13px; font-weight: 600; color: #718096; }
+        .avatar-preview { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid #3182ce; background: #edf2f7; }
+        .avatar-fallback { width: 55px; height: 55px; border-radius: 50%; background: #e2e8f0; color: #4a5568; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; border: 1px solid #cbd5e0; }
+
+        /* Custom Modern File Upload Component */
+        .file-input-wrapper { display: block; border: 2px dashed #cbd5e0; padding: 15px; text-align: center; border-radius: 6px; background: #f7fafc; cursor: pointer; transition: border 0.2s; position: relative; }
+        .file-input-wrapper:hover { border-color: #4299e1; }
+        .file-input-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        /* Action Form Buttons */
+        .form-actions { display: flex; gap: 15px; margin-top: 25px; }
+        .btn-submit { flex: 2; background: #3182ce; color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 15px; transition: background 0.2s; }
+        .btn-submit:hover { background: #2b6cb0; }
+        .btn-cancel { flex: 1; text-align: center; text-decoration: none; background: #fff; color: #4a5568; border: 1px solid #cbd5e0; padding: 12px; border-radius: 6px; font-weight: 600; font-size: 15px; transition: background 0.2s; }
+        .btn-cancel:hover { background: #f7fafc; }
+    </style>
 </head>
 <body>
 
-    
-    <h2>Update Employee Details</h2>
-    
-    <!-- 💡 মনে রাখবেন: ডেটা সাবমিট করার জন্য আমরা action এবং post মেথড ব্যবহার করছি -->
-    <form action="/api/update-user" method="POST" enctype="multipart/form-data">
-        <label>Name:</label><br>
-        <input type="text" name="name" required value="<%=user.name%>"><br><br>
-        <input type="hidden" name="employe_id" value="<%=user.id%>">
-
-        <label>Email:</label><br>
-        <input type="email" name="email" required value="<%=user.email%>"><br><br>
-
-        <label>Department:</label><br>
-        <input type="text" name="department" required value="<%=user.department%>"><br><br>
+    <div class="container">
         
+        <header>
+            <h1>Update Employee Details</h1>
+            <a href="/api/users" class="btn-back">← Directory</a>
+        </header>
 
-                 <% if(user.image) { %>
-                        <img src="/uploads/<%= user.image %>" width="50" height="50" style="border-radius: 50%;">
+        <!-- Main Edit Workspace Card Component -->
+        <div class="form-card">
+            <form action="/api/update-user" method="POST" enctype="multipart/form-data">
+                
+                <!-- Hidden Employee Identifier Field Field -->
+                <input type="hidden" name="employe_id" value="<%= user.id %>">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required value="<%= user.name %>" placeholder="Ex: John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" required value="<%= user.email %>" placeholder="Ex: john@company.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" name="department" required value="<%= user.department %>" placeholder="Ex: Software Architecture">
+                </div>
+
+                <!-- Existing Asset Asset Validation -->
+                <div class="current-image-box">
+                    <% if(user.image) { %>
+                        <img class="avatar-preview" src="/uploads/<%= user.image %>" alt="Current Image">
+                        <div>
+                            <span>Current Profile Avatar</span>
+                            <div style="font-size: 11px; color: #a0aec0; margin-top: 2px;">Keep blank to retain this file</div>
+                        </div>
                     <% } else { %>
-                        No Image
+                        <div class="avatar-fallback"><%= user.name.charAt(0).toUpperCase() %></div>
+                        <span>No image uploaded yet</span>
                     <% } %>
+                </div>
 
+                <div class="form-group">
+                    <label>Upload New Image (Optional)</label>
+                    <div class="file-input-wrapper">
+                        <span style="font-size: 14px; color: #4a5568; font-weight: 500;">Click to replace profile picture</span>
+                        <input type="file" name="profile_image" accept="image/*">
+                    </div>
+                </div>
 
-        <label>Profile Image:</label>
-        <input type="file" name="profile_image" accept="image/*"><br><br>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Update Record</button>
+                    <a href="/api/users" class="btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
 
-        <button type="submit">Submit</button>
-    </form>
-
-
-
+    </div>
 
 </body>
 </html>
