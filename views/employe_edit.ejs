@@ -52,12 +52,12 @@
         
         <header>
             <h1>Update Employee Details</h1>
-            <a href="/api/users" class="btn-back">← Directory</a>
+            <a href="/admin/createusers" class="btn-back">← Directory</a>
         </header>
 
         <!-- Main Edit Workspace Card Component -->
         <div class="form-card">
-            <form action="/api/update-user" method="POST" enctype="multipart/form-data">
+            <form action="/admin/update-user" method="POST" enctype="multipart/form-data">
                 
                 <!-- Hidden Employee Identifier Field Field -->
                 <input type="hidden" name="employe_id" value="<%= user.id %>">
@@ -101,7 +101,7 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Update Record</button>
-                    <a href="/api/users" class="btn-cancel">Cancel</a>
+                    <a href="/admin/createusers" class="btn-cancel">Cancel</a>
                 </div>
             </form>
         </div>

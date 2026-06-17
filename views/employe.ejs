@@ -97,7 +97,7 @@
             <!-- Core Workspace Form Component -->
             <div class="form-card">
                 <h2>Add New Employee</h2>
-                <form action="/api/store-user" method="POST" enctype="multipart/form-data">
+                <form action="/admin/store-user" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Full Name</label>
                         <input type="text" name="name" required placeholder="Ex: John Doe">
@@ -169,8 +169,8 @@
                                     <td style="color: #4a5568;"><%= user.email %></td>
                                     <td>
                                         <div class="actions-cell">
-                                            <a href="/api/edit-user/<%= user.id %>" class="btn-action btn-edit">Edit</a>
-                                            <a href="/api/delete-user/<%= user.id %>" onclick="return confirm('Are you sure you want to permanently delete this employee?')" class="btn-action btn-delete">Delete</a>
+                                            <a href="/admin/edit-user/<%= user.id %>" class="btn-action btn-edit">Edit</a>
+                                            <a href="/admin/delete-user/<%= user.id %>" onclick="return confirm('Are you sure you want to permanently delete this employee?')" class="btn-action btn-delete">Delete</a>
                                         </div>
                                     </td>
                                 </tr>
