@@ -47,7 +47,7 @@ pool.query("INSERT IGNORE INTO admin (email, password) VALUES ('admin@gmail.com'
 
 
 // ২. রাউটটি অ্যাপে যুক্ত করুন (লারাভেলের 'api' প্রিফিক্সের মতো)
-app.use('/api', userRoutes);
+app.use('/admin', userRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running successfully on port ${PORT}`);
