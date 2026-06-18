@@ -39,6 +39,13 @@ app.use(flash());
 // 💡 নোড জেএস নিয়ম: HTML Form এর ডেটা ব্যাক-এন্ডে রিড করার জন্য এটি অবশ্যই লাগবে
 app.use(express.urlencoded({ extended: true }));
 
+
+// সাময়িকভাবে এই ৩টি লাইন যোগ করুন জোরপূর্বক টেবিল তৈরির জন্য
+const pool = require('./config/db');
+pool.query("CREATE TABLE IF NOT EXISTS admin (id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+pool.query("INSERT IGNORE INTO admin (email, password) VALUES ('admin@gmail.com', '123')");
+
+
 // ২. রাউটটি অ্যাপে যুক্ত করুন (লারাভেলের 'api' প্রিফিক্সের মতো)
 app.use('/api', userRoutes);
 
