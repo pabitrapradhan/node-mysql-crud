@@ -45,6 +45,15 @@ const pool = require('./config/db');
 pool.query("CREATE TABLE IF NOT EXISTS admin (id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 pool.query("INSERT IGNORE INTO admin (email, password) VALUES ('admin@gmail.com', '123')");
 
+// 💡 লারাভেলের গ্লোবাল সেশন শেয়ারিং এর হুবহু সমান নোড জেএস নিয়ম:
+app.use((req, res, next) => {
+    // res.locals এর ভেতর সেশন রাখলে তা লারাভেলের গ্লোবাল ব্লেড সেশনের মতো কাজ করে
+    // এর ফলে এটি নোড জেএস এর সমস্ত ইজেএস (.ejs) পেজের জন্য অটোমেটিক 'পাবলিক' বা দৃশ্যমান হয়ে যাবে
+    res.locals.session = req.session; 
+    next();
+});
+
+
 
 // ২. রাউটটি অ্যাপে যুক্ত করুন (লারাভেলের 'api' প্রিফিক্সের মতো)
 app.use('/admin', userRoutes);

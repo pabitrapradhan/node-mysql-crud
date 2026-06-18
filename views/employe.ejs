@@ -72,6 +72,15 @@
             <p>Full-Stack Node.js Administration Dashboard Infrastructure Hub</p>
         </header>
 
+
+        <% if (session && session.admin) { %>
+    <h1>Welcome, <%= session.admin.email %></h1>
+    <p>Logged In ID: <%= session.admin.id %></p>
+    <a href="/admin/logout">Logout</a>
+<% } else { %>
+    <h1>Welcome, Guest</h1>
+<% } %>
+
         <!-- Dynamic Feedback Banners Block -->
         <% if (messages.success) { %>
             <div class="alert alert-success"><%= messages.success %></div>

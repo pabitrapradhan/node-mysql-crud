@@ -17,6 +17,46 @@ const showUsersPage = async (req, res) => {
     }
 };
 
+
+const login = async(req,res)=>{
+    res.render('login');
+}
+
+const login_add = async(req,res)=>{
+    
+    try {
+    
+    const {email,password} = req.body;
+    const [rows] = await db.query('SELECT * FROM admin WHERE email = ? AND password = ?', [email, password]);
+    if(rows.length > 0)
+    {
+         // 💡 লারাভেলের session(['admin' => $user]) এর মতো নোড জেএস নিয়ম:
+            // ডাটাবেস থেকে আসা প্রথম অ্যাডমিনের ডেটা সেশনে সেভ করা হলো
+            req.session.admin = rows[0]; 
+        return res.redirect('/admin/createusers');
+       
+    }
+    else
+    {
+        req.flash('error', 'Invalid email or password!');
+        res.render('login');
+       
+    }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error fetching data from MySQL database");
+    }
+
+}
+
+const logout = async(req,res)=>{
+    // 💡 লারাভেলের session()->forget('admin') এর মতো নোড জেএস নিয়ম:
+    req.session.admin = null; // সেশন থেকে অ্যাডমিন ডেটা মুছে ফেলা হলো
+    res.redirect('/admin/login'); // লগআউটের পর লগইন পেজে রিডাইরেক্ট করা হলো
+}
+
+
+
 const create_user = async(req,res)=>
 {
 const[rows]=await db.query('Select * from employees');
@@ -152,7 +192,7 @@ res.redirect('/admin/createusers');
 
 // ফাংশনটি এক্সপোর্ট করুন যাতে রাউট ফাইলে ব্যবহার করা যায়
 module.exports = {
-    showUsersPage,create_user,storeUser,deleteUser,editUser,updateUser
+    showUsersPage,create_user,storeUser,deleteUser,editUser,updateUser,login,login_add,logout
 };
 
 
